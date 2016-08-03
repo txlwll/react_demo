@@ -5,6 +5,10 @@
 // ];
 
 var CommentBox = React.createClass({
+    propTypes: {
+        url: React.PropTypes.string.isRequired,
+        pollInterval: React.PropTypes.number.isRequired
+    },
     loadCommentsFormServer: function() {
         $.ajax({
             url: this.props.url,
@@ -19,21 +23,21 @@ var CommentBox = React.createClass({
         });
     },
     handleCommentSubmit: function (comment) {
-        var comments = this.state.data;
+        var comments = this.state.a;
         var newComments = comments.concat([comment]);
-        this.setState({data:newComments});
-        $.ajax({
-            url: this.props.url,
-            dataType: 'json',
-            type: 'POST',
-            data: comment,
-            success: function(data) {
-                this.setState({a: data});
-            }.bind(this),
-            error: function(xhr, status, err) {
-                console.error(this.props.url, status, err.toString());
-            }.bind(this)
-        });
+        this.setState({a: newComments});
+        // $.ajax({
+        //     url: this.props.url,
+        //     dataType: 'json',
+        //     type: 'POST',
+        //     data: comment,
+        //     success: function(data) {
+        //         this.setState({a: data});
+        //     }.bind(this),
+        //     error: function(xhr, status, err) {
+        //         console.error(this.props.url, status, err.toString());
+        //     }.bind(this)
+        // });
     },
     getInitialState: function() {
         return {a: []};
@@ -45,14 +49,19 @@ var CommentBox = React.createClass({
     render: function() {
         return (
             <div className="commentBox">
-                <h1>Comments</h1>
+                <h1>{aa}</h1>
                 <CommentList data={this.state.a} />
-                <CommentForm  onCommentSubmit={this.handleCommentSubmit} />
+                <CommentForm onCommentSubmit={this.handleCommentSubmit} />
             </div>
         );
     }
 });
+var aa = 'First · Second '
+var initData = {
+    url: '/react_demo/data/test.json',
+    pollInterval: 2000
+}
 ReactDOM.render(
-    <CommentBox url="/react_demo/data/test.json" pollInterval={2000}/>,
+    <CommentBox {...initData} />,
     document.getElementById('example')
 );
